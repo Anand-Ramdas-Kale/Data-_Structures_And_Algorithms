@@ -1,5 +1,15 @@
 // reference : CLRS: Introduction to Algorithms - 3E V-19, 
 
+static inline uint32_t D(uint32_t n) {
+    uint32_t mul = 1;
+    uint32_t approx_logarithm = 0;
+    while (mul <= n) {
+        mul <<= 1 ;
+        approx_logarithm += 1;
+    }
+    return approx_logarithm + 5;  // till n <= 2^32 otherwise, approx_logarithm + num_bits(n)
+}
+
 Heap *MAKE_FIB_HEAP() {
     Heap *new = malloc(sizeof Heap);
     memset(new, 0, sizeof(Heap));
