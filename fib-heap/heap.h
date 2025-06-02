@@ -3,6 +3,7 @@
 #define heap.h_
 
 // reference : CLRS: Introduction to Algorithms - 3E, 
+#define MAX_KEY_INVALID INT_MAX
 
 /* Data associated to the keys */
 typedef struct data {
@@ -18,6 +19,7 @@ typedef struct Node {
     struct Node *parent;    // pointer to parent node
     struct Node *left;      // pointer to left node in circular-doubly-linked list
     struct Node *right;     // pointer to right node in circular-doubly-linked list
+    struct Node *child;     // pointer to the children list of node
 } Node;
 
 /* The main heap structure */
@@ -32,6 +34,9 @@ typedef struct Heap {
 Heap *MAKE_FIB_HEAP();
 Heap *FIB_HEAP_UNION(Heap*, Heap*);
 void FIB_HEAP_INSERT(Heap *H, Node *x);
+void FIB_HEAP_LINK(Heap *H, Node *y, Node *x);
+void CONSOLIDATE(Heap *H);
+Node *FIB_HEAP_EXTRACT_MIN(Heap *H);
 
 #endif  // heap.h_
 

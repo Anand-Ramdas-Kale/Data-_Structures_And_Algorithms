@@ -58,3 +58,122 @@ Heap *FIB_HEAP_UNION(Heap *H1, Heap *H2) {
     H2->min = min;
     return H2;
 }
+
+
+void FIB_HEAP_LINK(Heap *H, Node *y, Node *x) {
+    /* remove y from root list of H */
+    y->left->right = y->right;
+    y->right->left = y->left;
+    
+    /* make y a child of x */
+    Node *child_list = x->child;
+    if (child_list) {
+        /* (insert y into child list of x) */
+        child_list->left->right = y;
+        y->left = child_list->left;
+        child_list->left = y;
+        y->right = child_list;
+    } else {
+        y->left = y;
+        y->right = y;
+        x->child = y;
+    }
+    x->degree += 1;
+    H->n -= 1;
+    y->mark = false;
+}
+
+void CONSOLIDATE(Heap *H) {
+    /* let A[0 .. D(H.n)] be a new array */
+    int max_degree = D(H->n);
+    Node *A[max_degree];
+    Node *next = H->min;
+    memset(A, 0, sizeof(Node *) * max_degree);
+    uint32_t pending_nodes = H->n;
+    while (pending_nodes) {
+        Node *x = next;             // the node bing processed
+        uint32_t d = x->degree;     // the degree of the node being processed
+        next = next->right;
+
+        while (A[d]) {
+            Node *y = A[d];
+            if (y->key < x->key) {
+                Node *temp = y;
+                y = x;
+                x = temp;
+            }
+            FIB_HEAP_LINK(H, y, x);
+            A[d] = NULL;
+            d += 1;
+        }
+        A[d] = x;                   // insert x in correct position accoriding to its degree
+        pending_nodes -= 1;         // if i was writing this in asm i would have checked flags instead of testl
+    }
+
+    H->min = NULL;
+    Node forMin = {.key = MAX_KEY_INVALID};
+    Node *min = &forMin;
+    uint32_t num_roots = 0;
+    Node dummy;
+    Node *new_root_list = &dummy;
+    dummy.left = new_root_list;
+    dummy.right = new_root_list;
+
+    /* formation of new root list for H */
+    for (int i = 0; i < max_degree; i += 1) {
+        Node *node;
+        if (node = A[i]) {
+            (dummy.left)->right = node;
+            node->left = dummy.left;
+            dummy.left = node;
+            node->right = &dummy;
+            if (min->key > node->key) {
+                min = node;
+            }
+            num_roots += 1;
+        }
+    }
+    
+    if (num_roots) {
+        H->min = min;
+    }
+    (dummy.left)->right = dummy.right;
+    (dummy.right)->left = dummy.left;
+    H->n = num_roots;
+}
+
+Node *FIB_HEAP_EXTRACT_MIN(Heap *H) {
+    Node *z = H->min;
+    if (z) { // if z is not null
+        /* Add each children of z to root list of H */
+        uint32_t node_count = 0;
+        Node *x = z->child;
+        if (x) {
+            Node *cursor = x->left;
+            do {
+                cursor->parent = NULL;
+                node_count += 1;
+                cursor = cursor->left;
+            } while (cursor != x);
+            Node *right_end = x->left;
+            Node *left_end = x->right;
+            z->left->right = left_end;
+            left_end->left = z->left;
+            z->left = right_end;
+            right_end->right = z;
+            H->n += node_count;
+        }
+        /* remove z from root list of H */
+        Node *left;
+        Node *right;
+        if ((left = z->left) != z) {
+            right = z->right;
+            left->right = right;
+            right->left = left;
+        }
+        H->n -= 1;
+        z->parent = NULL;
+        if (z->right == z) H->min = NULL; else H->min = z->right, CONSOLIDATE(H); // is any child left?
+    }
+    return z;
+}
