@@ -1,6 +1,10 @@
 // strictly not compatible with c++
-#ifndef heap.h_
-#define heap.h_
+#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <limits.h>
+#ifndef heap_h_
+#define heap_h_
 
 // reference : CLRS: Introduction to Algorithms - 3E, 
 #define MAX_KEY_INVALID INT_MAX
@@ -12,7 +16,7 @@ typedef struct data {
 
 /* The Nodes in Heap */
 typedef struct Node {
-    uint64_t key;           // key, might be char key[big]
+    uint64_t key;           // key, might be char key[big], can be made signed, nothing fails if made
     data_t data;            // data associated with this key
     bool mark;              // mark
     uint32_t degree;        // number of children, not including parent
@@ -38,5 +42,5 @@ void FIB_HEAP_LINK(Heap *H, Node *y, Node *x);
 void CONSOLIDATE(Heap *H);
 Node *FIB_HEAP_EXTRACT_MIN(Heap *H);
 
-#endif  // heap.h_
+#endif  // heap_h_
 

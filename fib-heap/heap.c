@@ -1,12 +1,15 @@
 // reference : CLRS: Introduction to Algorithms - 3E V-19, 
 
+#include "heap.h"
+
 static inline uint32_t D(uint32_t n) {
     return 32 + 5 - __builtin_clz(n - 1); // can be made more accurate, but this works fine
 }
 
 Heap *MAKE_FIB_HEAP() {
-    Heap *new = malloc(sizeof Heap);
+    Heap *new = malloc(sizeof(Heap));
     memset(new, 0, sizeof(Heap));
+    return new;
 }
 
 void FIB_HEAP_INSERT(Heap *H, Node *x) {
