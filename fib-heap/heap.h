@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <limits.h>
+#include <stdio.h>
+
 #ifndef heap_h_
 #define heap_h_
 
@@ -41,6 +43,7 @@ void FIB_HEAP_INSERT(Heap *H, Node *x);
 void FIB_HEAP_LINK(Heap *H, Node *y, Node *x);
 void CONSOLIDATE(Heap *H);
 Node *FIB_HEAP_EXTRACT_MIN(Heap *H);
+void FIB_HEAP_PRINT(Heap *H);
 
 #endif  // heap_h_
 

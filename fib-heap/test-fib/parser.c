@@ -88,11 +88,6 @@ pnode *execute_ll(pnode *ll) {
         }
         ll = ll->next;
     }
-    ll = head;
-    while (ll) {
-        printf("%c: %ld\n", ll->op, ll->key);
-        ll = ll->next;
-    }
     return head;
 }
 

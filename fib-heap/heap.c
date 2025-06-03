@@ -1,6 +1,7 @@
 // reference : CLRS: Introduction to Algorithms - 3E V-19, 
 
 #include "heap.h"
+#define INDENT_WIDTH 2
 
 static inline uint32_t D(uint32_t n) {
     return 32 + 5 - __builtin_clz(n - 1); // can be made more accurate, but this works fine
@@ -156,14 +157,14 @@ Node *FIB_HEAP_EXTRACT_MIN(Heap *H) {
         uint32_t node_count = 0;
         Node *x = z->child;
         if (x) {
-            Node *cursor = x->left;
+            Node *cursor = x;
             do {
                 cursor->parent = NULL;
                 node_count += 1;
                 cursor = cursor->left;
             } while (cursor != x);
             Node *right_end = x->left;
-            Node *left_end = x->right;
+            Node *left_end = x;
             z->left->right = left_end;
             left_end->left = z->left;
             z->left = right_end;
@@ -183,4 +184,22 @@ Node *FIB_HEAP_EXTRACT_MIN(Heap *H) {
         if (z->right == z) H->min = NULL; else H->min = z->right, CONSOLIDATE(H); // is any child left?
     }
     return z;
+}
+
+void FIB_HEAP_PRINT_DFS(Node *node, uint32_t depth) {
+    if (!node) {
+        return ;
+    }
+    Node *ll = node;
+    do {
+        printf("%*s%ld\n",depth * INDENT_WIDTH, "", ll->key);
+        FIB_HEAP_PRINT_DFS(ll->child, depth + 1);
+        ll = ll->right;
+    } while (ll != node);
+}
+
+void FIB_HEAP_PRINT(Heap *H) {
+    if (H) {
+        FIB_HEAP_PRINT_DFS(H->min, 0);
+    }
 }
