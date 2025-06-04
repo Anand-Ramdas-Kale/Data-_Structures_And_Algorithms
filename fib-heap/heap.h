@@ -30,7 +30,8 @@ typedef struct Node {
 
 /* The main heap structure */
 typedef struct Heap {
-    uint32_t n;             // number of trees in heap at top level
+    uint32_t n;             // number of nodes in heap at top level
+    uint32_t num_roots;     // number of trees in heap at top level
     Node *min;              // pointer to minimum node (root of a tree)
 } Heap;
 
