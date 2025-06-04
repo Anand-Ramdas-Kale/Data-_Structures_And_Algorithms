@@ -63,6 +63,7 @@ Heap *FIB_HEAP_UNION(Heap *H1, Heap *H2) {
     min2->right = min1;
     min1->left  = min2;
     H2->n += H1->n;
+    H2->num_roots += H1->num_roots;
     free (H1);
     H2->min = min;
     return H2;
