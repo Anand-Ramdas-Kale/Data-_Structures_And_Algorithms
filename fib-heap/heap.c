@@ -183,6 +183,29 @@ Node *FIB_HEAP_EXTRACT_MIN(Heap *H) {
     return z;
 }
 
+void CUT(Heap *H, Node *x, Node *y) {
+    printf("NOT_IMPLEMENTED_YET: CUT\n");
+}
+
+void CASCADING_CUT(Heap *H, Node *x) {
+    printf("NOT_IMPLEMENTED_YET: CASCADING_CUT\n");
+}
+
+void FIB_HEAP_DECREASE_KEY(Heap *H, Node *x, TYPE_KEY k) {
+    if (k < x->key) {
+        x->key = k;
+        Node *y = x->parent;
+        if (y && y->key > x->key) {
+            CUT(H, x, y);
+            CASCADING_CUT(H, y);
+        }
+        if (x->key < H->min->key) {
+            H->min = x;
+        }
+    }
+}
+
+
 void FIB_HEAP_PRINT_DFS(Node *node, uint32_t depth) {
     if (!node) {
         return ;
