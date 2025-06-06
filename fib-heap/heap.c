@@ -89,7 +89,7 @@ void FIB_HEAP_LINK(Heap *H, Node *y, Node *x) {
         x->child = y;
     }
     x->degree += 1;
-    H->num_roots -= 1;
+    // H->num_roots -= 1; /* assuming that this procedure will be called only by FIB_HEAP_EXTRACT_MIN */
     y->mark = false;
     y->parent = x;
 }
